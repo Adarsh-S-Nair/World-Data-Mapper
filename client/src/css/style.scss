@@ -1,0 +1,32 @@
+:root {
+    --dark-gray: rgb(28, 28, 28);
+    --light-gray: rgb(46, 46, 46);
+    --blue: rgb(116, 188, 255);
+    --hover-white: rgba(163, 163, 163, 0.534);
+}
+
+body {
+    background-color: var(--light-gray);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar{
+    font-weight: bold;
+    user-select: none;
+    background-color: var(--dark-gray);
+    list-style-type: none;
+}
+
+.logo {
+    color: var(--blue);
+}
+
+.navbar-options {
+    color: white;
+}
+
+.navbar-options div:hover {
+    cursor: pointer;
+    color: var(--dark-gray);
+    background-color: var(--blue);
+}

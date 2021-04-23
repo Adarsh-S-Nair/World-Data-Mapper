@@ -1,0 +1,30 @@
+html {
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar {
+    padding: 0px 5px;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-between;
+}
+
+.logo {
+    padding: 15px 5px;
+    text-align: center;
+
+}
+
+.navbar-options div {
+    padding: 15px 15px;
+}
+
+.navbar-options {
+    display: flex;
+}
