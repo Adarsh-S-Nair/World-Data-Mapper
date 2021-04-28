@@ -1,19 +1,92 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { LOGOUT } from '../../cache/mutations';
+import { useMutation, useApolloClient } from '@apollo/client';
+import { Link, useLocation } from 'react-router-dom';
 
-export default class Navbar extends Component {
-    constructor(props) {
-        super(props);
+const Navbar = (props) => {
+    const client = useApolloClient();
+    const [Logout] = useMutation(LOGOUT);
+
+    const loggedIn = props.user === null ? false : true;
+
+    const handleLogout = async (e) => {
+        Logout();
+        const { data } = await props.fetchUser();
+        if (data) {
+            let reset = await client.resetStore();
+        }
     }
 
-    render() {
-        return(
-            <div class="navbar">
-                <div className="logo">The World Data Mapper</div>
-                <div className="navbar-options">
-                    <div class="nav-button">Sign Up</div>
-                    <div class="nav-button">Login</div>
-                </div>
+    const buttonStyle = {
+        color: 'white',
+        textDecoration: 'none'
+    }
+
+    const location = useLocation();
+    let navbarOptions = (
+            <div className="navbar-options">
+                <Link style={buttonStyle} to='/signup'>
+                    <div className="nav-button">Sign Up</div>
+                </Link>
+                <Link style={buttonStyle} to='/login'>
+                    <div className="nav-button">Login</div>
+                </Link>
             </div>
-        );
+    );
+
+    if(loggedIn) {
+        if(location.pathname == '/update-account'){
+            navbarOptions = (
+                <div className="navbar-options">
+                    <div class="username">{props.user.name}</div>
+                    <Link style={buttonStyle} to='/'>
+                        <div onClick={handleLogout} class="nav-button">Logout</div>
+                    </Link>
+                </div>
+            )
+        }
+        else {
+            navbarOptions = (
+                <div className="navbar-options">
+                    <Link style={buttonStyle} to="/update-account">
+                        <div class="nav-button username">{props.user.name}</div>
+                    </Link>
+                    <Link style={buttonStyle} to='/'>
+                        <div onClick={handleLogout} class="nav-button">Logout</div>
+                    </Link>
+                </div>
+            )
+        }
     }
+    else{
+        if(location.pathname == '/signup') {
+            navbarOptions = (
+                <div className="navbar-options">
+                    <Link style={buttonStyle} to='/login'>
+                        <div class="nav-button">Login</div>
+                    </Link>
+                </div>
+            );
+        }
+        else if(location.pathname == '/login') {
+            navbarOptions = (
+                <div className="navbar-options">
+                    <Link style={buttonStyle} to='/signup'>
+                        <div class="nav-button">Sign Up</div>
+                    </Link>
+                </div>
+            );
+        }
+    }
+
+    return(
+        <div class="navbar">
+            <Link style={buttonStyle} to="/">
+                <div className="logo">The World Data Mapper</div>
+            </Link>
+            { navbarOptions }
+        </div>
+    );
 }
+
+export default Navbar;
