@@ -36,26 +36,36 @@ html {
     text-align: center;
 }
 
-.signup-card {
+.card {
     user-select: none;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    background: var(--dark-gray);
-    border-radius: 10px;
 }
 
-.signup-card h1 {
-    color: var(--blue);
+.maps-card {
+    height: 50%;
+}
+
+.maps-list {
+    height: calc(100% - 50px);
+}
+
+.card h1 {
     text-align: left;
-    padding: 20px 0px 0px 40px;
+    padding: 20px 0px 10px 40px;
 }
 
 .form {
     padding: 0 40px;
     box-sizing: border-box;
+}
+
+.maps-contents {
+    padding: 0 40px 40px 40px;
+    height: calc(100% - 69px);
 }
 
 .text-field {
@@ -109,15 +119,8 @@ html {
     height: 50px;
 }
 
-.submit-button {
-    background-color: var(--blue);
-    color: white;
-}
-
-.submit-button:hover {
-    cursor: pointer;
-    color: var(--hover-white);
-    background-color: rgb(0, 90, 173);
+.create-new-map-button {
+    width: 100%;
 }
 
 .cancel-button:hover {

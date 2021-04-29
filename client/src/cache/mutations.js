@@ -36,3 +36,9 @@ export const UPDATE_ACCOUNT = gql`
         }
     }
 `;
+
+export const ADD_MAP = gql`
+    mutation AddMap($map: MapInput!) {
+        addMap(map: $map)
+    }
+`;

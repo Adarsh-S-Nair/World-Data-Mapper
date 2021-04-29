@@ -41,7 +41,7 @@ const Login = (props) => {
     const history = useHistory();
 
     return (
-        <div className="signup-card">
+        <div className="card">
             <h1>Login</h1>
             <div className="form">
                 <div class="text-field">

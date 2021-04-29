@@ -24,19 +24,18 @@ const SignUp = (props) => {
                 return;
             }
         }
-        const {user} = await Register({ variables: { ...input } });
-        if(user) {
-            console.log(user);
-            if(user.register.email === 'already exists') {
-                alert('User with that email already registered');
-            }
+        const {loading, error, data} = await Register({ variables: { ...input } });
+        if (data.register.email === "already exists") {
+            alert('User with that email already registered');
+            return;
         }
+        history.push('/');
     }
 
     const history = useHistory();
 
     return (
-        <div className="signup-card">
+        <div className="card">
             <h1>Sign Up</h1>
             <div className="form">
                 <div class="text-field">
@@ -53,10 +52,7 @@ const SignUp = (props) => {
                 </div>
                 <div className="form-buttons">
                     <input onClick={() => {history.push('/')}} className="form-button cancel-button" type="submit" value="CANCEL"></input>
-                    <input onClick={() => {
-                        handleSignUp();
-                        history.push('/');
-                    }} className="form-button submit-button" type="submit" value="SIGN UP"></input>
+                    <input onClick={handleSignUp} className="form-button submit-button" type="submit" value="SIGN UP"></input>
                 </div>
             </div>
         </div>
