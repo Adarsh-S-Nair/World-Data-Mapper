@@ -1,19 +1,21 @@
 import React from 'react';
 import { LOGOUT } from '../../cache/mutations';
 import { useMutation, useApolloClient } from '@apollo/client';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 
 const Navbar = (props) => {
     const client = useApolloClient();
     const [Logout] = useMutation(LOGOUT);
 
     const loggedIn = props.user === null ? false : true;
+    const history = useHistory();
 
     const handleLogout = async (e) => {
         Logout();
         const { data } = await props.fetchUser();
         if (data) {
-            let reset = await client.resetStore();
+            await client.resetStore();
+            history.push("/");
         }
     }
 
@@ -38,7 +40,7 @@ const Navbar = (props) => {
         if(location.pathname == '/update-account'){
             navbarOptions = (
                 <div className="navbar-options">
-                    <div class="username">{props.user.name}</div>
+                    <div className="username">{props.user.name}</div>
                     <Link style={buttonStyle} to='/'>
                         <div onClick={handleLogout} class="nav-button">Logout</div>
                     </Link>
@@ -49,10 +51,10 @@ const Navbar = (props) => {
             navbarOptions = (
                 <div className="navbar-options">
                     <Link style={buttonStyle} to="/update-account">
-                        <div class="nav-button username">{props.user.name}</div>
+                        <div className="nav-button username">{props.user.name}</div>
                     </Link>
                     <Link style={buttonStyle} to='/'>
-                        <div onClick={handleLogout} class="nav-button">Logout</div>
+                        <div onClick={handleLogout} className="nav-button">Logout</div>
                     </Link>
                 </div>
             )
@@ -72,7 +74,7 @@ const Navbar = (props) => {
             navbarOptions = (
                 <div className="navbar-options">
                     <Link style={buttonStyle} to='/signup'>
-                        <div class="nav-button">Sign Up</div>
+                        <div className="nav-button">Sign Up</div>
                     </Link>
                 </div>
             );
@@ -80,7 +82,7 @@ const Navbar = (props) => {
     }
 
     return(
-        <div class="navbar">
+        <div className="navbar">
             <Link style={buttonStyle} to="/">
                 <div className="logo">The World Data Mapper</div>
             </Link>

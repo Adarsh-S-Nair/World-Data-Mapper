@@ -8,7 +8,24 @@ const regionSchema = new Schema(
         },
         name: {
             type: String,
-            required: true
+            required: false
+        },
+        capital: {
+            type: String,
+            required: false
+        },
+        leader: {
+            type: String,
+            required: false
+        },
+        flag: {
+            type: String,
+            required: false
+        },
+        landmarks: [String],
+        parent: {
+            type: String,
+            required: false
         }
     }
 )

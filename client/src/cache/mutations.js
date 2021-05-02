@@ -42,3 +42,27 @@ export const ADD_MAP = gql`
         addMap(map: $map)
     }
 `;
+
+export const RENAME_MAP = gql`
+    mutation RenameMap($_id: String!, $name: String!) {
+        renameMap(_id: $_id, name: $name)
+    }
+`;
+
+export const DELETE_MAP = gql`
+    mutation DeleteMap($_id: String!) {
+        deleteMap(_id: $_id)
+    }
+`;
+
+export const MOVE_MAP_TO_TOP = gql`
+    mutation MoveMapToTop($_id: String!, $owner: String!) {
+        moveMapToTop(_id: $_id, owner: $owner)
+    }
+`;
+
+export const ADD_SUBREGION = gql`
+    mutation AddSubregion($mapID: String!, $regionID: String!) {
+        addSubregion(mapID: $mapID, regionID: $regionID)
+    }
+`;

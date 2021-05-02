@@ -46,7 +46,139 @@ html {
 }
 
 .maps-card {
+    width: 500px;
     height: 50%;
+}
+
+.region-spreadsheet {
+    user-select: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 850px;
+    width: 90%;
+    height: 80%;
+    color: white;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.region-spreadsheet-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.region-path {
+    padding-top: 20px;
+    font-size: 30px;
+    display: flex;
+}
+
+.path-section {
+    display: flex;
+}
+
+.path-name:hover {
+    color: var(--blue);
+    cursor: pointer;
+}
+
+.right-arrow {
+    font-size: 45px;
+}
+
+.add-region {
+    padding: 15px;
+    font-size: 50px;
+}
+
+.add-region:hover {
+    color: var(--blue);
+    cursor: pointer;
+}
+
+.spreadsheet-table {
+    user-select: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 850px;
+    width: 100%;
+    height: 80%;
+    color: white;
+    background-color: var(--dark-gray);
+    overflow-x: auto;
+
+    position: absolute;
+}
+
+.spreadsheet-header {
+    width: 100%;
+    background-color: var(--dark-blue);
+    display: flex;
+    padding-right: 25px;
+}
+
+.spreadsheet-header h1 {
+    text-align: center;
+    padding: 10px 0px;
+}
+
+.control-col {
+    display: flex;
+    justify-content: space-between;
+    width: 10%;
+}
+
+.name-col {
+    width: 15%;
+}
+
+.capital-col {
+    width: 15%;
+}
+
+.leader-col {
+    width: 25%;
+}
+
+.flag-col {
+    width: 10%;
+}
+
+.landmarks-col {
+    width: 30%;
+}
+
+.region-entry {
+    display: flex;
+    text-align: center;
+    padding: 20px 0px;
+    padding-right: 25px;
+}
+
+.region-entry-control {
+    display: none;
+}
+
+.region-entry:hover > .control-col > .region-entry-control {
+    cursor: pointer;
+    display: flex;
+}
+
+.view-entry:hover {
+    color: var(--blue);
+}
+
+.delete-entry:hover {
+    color: var(--light-red);
+}
+
+.view-subregion:hover {
+    color: var(--blue);
 }
 
 .maps-list {
@@ -64,15 +196,15 @@ html {
 }
 
 .maps-contents {
-    padding: 0 40px 40px 40px;
-    height: calc(100% - 69px);
+    padding-bottom: 40px;
+    height: calc(100% - 79px);
 }
 
 .text-field {
     color: white;
     position: relative;
     border-bottom: 2px solid #adadad;
-    margin: 40px 0;
+    margin-top: 40px;
 }
 
 .text-field input {
@@ -107,7 +239,7 @@ html {
 .form-buttons {
     justify-content: space-between;
     display: flex;
-    padding-bottom: 40px;
+    padding: 40px 0px;
 }
 
 .form-button {
@@ -120,10 +252,36 @@ html {
 }
 
 .create-new-map-button {
-    width: 100%;
+    margin: 20px 15%;
+    width: 70%;
 }
 
 .cancel-button:hover {
     cursor: pointer;
     background-color: rgb(145, 145, 145);
+}
+
+.map-entry {
+    display: flex;
+    font-size: 20px;
+}
+
+.map-entry:hover > .map-controls {
+    display: flex;
+}
+
+.map-name {
+    padding: 20px 40px;
+    width: 75%;
+}
+
+.map-controls {
+    display: none;
+    justify-content: space-around;
+    padding: 20px 10px;
+    width: 25%;
+}
+
+.maps-list {
+    overflow: auto;
 }

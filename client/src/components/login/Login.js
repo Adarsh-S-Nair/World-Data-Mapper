@@ -44,11 +44,11 @@ const Login = (props) => {
         <div className="card">
             <h1>Login</h1>
             <div className="form">
-                <div class="text-field">
+                <div className="text-field">
                     <input name="email" type="text" onBlur={updateInput} required></input>
                     <label>Email</label>
                 </div>
-                <div class="text-field">
+                <div className="text-field">
                     <input name="password" type="password" onBlur={updateInput} required></input>
                     <label>Password</label>
                 </div>

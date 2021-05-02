@@ -15,7 +15,7 @@ const mapSchema = new Schema(
             type: String,
             required: true
         },
-        root: Region,
+        subregions: [Region],
         index: {
             type: Number,
             default: 0

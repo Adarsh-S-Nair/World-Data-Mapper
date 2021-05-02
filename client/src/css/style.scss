@@ -5,7 +5,10 @@
     --light-gray: rgb(46, 46, 46);
     --blue: rgb(59, 160, 255);
     --dark-blue: rgb(0, 83, 161);
+    --red: rgb(151, 0, 0);
+    --light-red: rgb(255, 58, 58);
     --hover-white: rgba(212, 212, 212, 0.945);
+    --button-hover-white: rgba(109, 109, 109, 0.945);
 }
 
 body {
@@ -50,15 +53,33 @@ body {
     font-size: 70px;
 }
 
+.spreadsheet-table {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.445),0 6px 40px 0 rgba(0, 0, 0, 0.315);
+}
+
 .card {
     background: var(--dark-gray);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.445),0 6px 40px 0 rgba(0, 0, 0, 0.315);
+}
+
+.form-button {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.075),0 6px 40px 0 rgba(0, 0, 0, 0.315);
 }
 
 .card h1 {
     border-color: var(--dark-blue);
     background-color: var(--dark-blue);
     color: white;
+}
+
+.delete-map-modal h1 {
+    border-color: var(--red);
+    background-color: var(--red);
+    color: white;
+}
+
+.cancel-button {
+    background-color: var(--hover-white);
 }
 
 .submit-button {
@@ -70,4 +91,62 @@ body {
     cursor: pointer;
     color: var(--hover-white);
     background-color: rgb(0, 61, 117);
+}
+
+.delete-button {
+    background-color: var(--red);
+    color: white;
+}
+
+.delete-button:hover {
+    cursor: pointer;
+    color: var(--hover-white);
+    background-color: rgb(94, 0, 0);
+}
+
+.overlay {
+    backdrop-filter: blur(6px);
+    background-color:#000000a1;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    top: 0px;
+    left: 0px;
+}
+
+.modal {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    user-select: none;
+    box-sizing: border-box;
+    z-index: 10;
+    text-align: center;
+    animation-name: modalanimation;
+    animation-duration: 0.2s;
+}
+
+@keyframes modalanimation {
+    from {top: -300px; opacity: 0}
+    to {top: 50%; opacity: 1}
+}
+
+.map-entry {
+    color: white;
+}
+
+.map-entry:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.404);
+}
+
+.region-entry:hover {
+    background-color: rgba(0, 0, 0, 0.404);
+}
+
+.edit-map-name:hover {
+    color: var(--blue);
+}
+
+.delete-map:hover {
+    color: var(--light-red);
 }
