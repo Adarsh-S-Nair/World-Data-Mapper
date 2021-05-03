@@ -50,14 +50,11 @@ const RegionSpreadsheet = (props) => {
     }
 
     const addSubregion = async () => {
-        console.log(region._id);
         const { data } = await AddSubregion({ variables: { mapID: map._id, regionID: region._id }, refetchQueries: [{ query: GET_DB_MAPS }]});
         await refetchMaps(refetch);
     }
     
     const history = useHistory();
-
-    console.log(path);
 
     return (
         <div className="region-spreadsheet">
@@ -96,7 +93,9 @@ const RegionSpreadsheet = (props) => {
                                 <div className="flag-col">{region.flag}</div>
                                 <div className="landmarks-col">{region.landmarks}</div>
                                 <div className="control-col ">
-                                    <div className="region-entry-control view-entry material-icons">visibility</div>
+                                    <div className="region-entry-control view-entry material-icons" onClick={() => {
+                                        history.push(`/viewer/${map._id}/${region._id}`);
+                                    }}>visibility</div>
                                     <div className="region-entry-control view-subregion material-icons" onClick={() => {
                                         history.push(`/spreadsheet/${map._id}/${region._id}`);
                                         refetchMaps(refetch);

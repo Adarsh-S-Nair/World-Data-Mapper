@@ -9,11 +9,10 @@ import Login                                        from './components/login/Log
 import UpdateAccount                                from './components/update-account/UpdateAccount';
 import Maps                                         from './components/maps/Maps';
 import RegionSpreadsheet from './components/region-spreadsheet/RegionSpreadsheet';
+import RegionViewer from './components/region-viewer/RegionViewer';
  
 const App = () => {
     let user = null;
-    
-    const [region, setRegion] = useState({});
 
     const { loading, error, data, refetch } = useQuery(queries.GET_DB_USER);
     if(error) { console.log(error); }
@@ -27,12 +26,13 @@ const App = () => {
                 <Switch>
                     <Route path="/" exact render={() => {
                         if(user == null) { return <Homescreen />}
-                        return <Maps user={user} setRegion={setRegion} />
+                        return <Maps user={user} />
                     }}/>
                     <Route path="/signup" render={() => <SignUp />} />
                     <Route path="/login" render={() => <Login fetchUser={refetch} />} />
                     <Route path="/update-account" render={() => <UpdateAccount user={user} fetchUser={refetch} />} />
-                    <Route path="/spreadsheet/:id" render={() => <RegionSpreadsheet region={region} />} />
+                    <Route path="/spreadsheet/:id" render={() => <RegionSpreadsheet />} />
+                    <Route path="/viewer/:id" render={() => <RegionViewer />} />
                 </Switch>
             </div>
         </BrowserRouter>

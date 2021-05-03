@@ -18,7 +18,6 @@ const MapsList = (props) => {
                 props.maps && mostRecentMaps.map(map => (
                     <div key={map._id} className="map-entry">
                         <div onClick={() => {
-                            props.setRegion(map.root);
                             props.moveMapToTop(map._id, map.owner);
                             history.push(`/spreadsheet/${map._id}/${map.subregions[0]._id}`);
                         }} className="map-name">{map.name}</div>

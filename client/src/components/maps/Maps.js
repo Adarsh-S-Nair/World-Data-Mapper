@@ -86,8 +86,7 @@ const Maps = (props) => {
             <div className="card maps-card">
                 <h1>Your Maps</h1>
                 <div className="maps-contents">
-                    <MapsList maps={maps} setShowRenameMap={setShowRenameMap} setShowDeleteMap={setShowDeleteMap} setRegion={props.setRegion}
-                    moveMapToTop={moveMapToTop} />
+                    <MapsList maps={maps} setShowRenameMap={setShowRenameMap} setShowDeleteMap={setShowDeleteMap} moveMapToTop={moveMapToTop} />
                     <input onClick={setShowNameMap} className="form-button submit-button create-new-map-button" type="submit" value="CREATE NEW MAP"></input>
                 </div>
             </div>

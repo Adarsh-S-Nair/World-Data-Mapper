@@ -181,6 +181,79 @@ html {
     color: var(--blue);
 }
 
+.region-viewer {
+    display: flex;
+    user-select: none;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 850px;
+    width: 90%;
+    height: 80%;
+    color: white;
+
+    justify-content: space-around;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.landmarks-form {
+    user-select: none;
+    width: 100%;
+    height: 95%;
+    color: white;
+    background-color: var(--dark-gray);
+}
+
+.region-details {
+    padding: 0px 40px;
+    font-size: 25px;
+    user-select: none;
+    width: 100%;
+    height: 95%;
+    color: white;
+    background-color: var(--dark-gray);
+    overflow-y: auto;
+}
+
+.region-viewer-image {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 50px 0px;
+    height: 400px;
+    line-height: 300px;
+    text-align: center;
+}
+
+.viewer-details {
+    padding: 80px 0px;
+}
+
+.viewer-detail {
+    padding: 10px 0px;
+}
+
+.landmarks-card {
+    width: 35%;
+}
+
+.details-card {
+    width: 55%;
+}
+
+.landmarks-card h1 {
+    padding-left: 40px;
+    background-color: var(--dark-blue);
+}
+
+.details-card h1 {
+    padding-left: 40px;
+    background-color: var(--dark-blue);
+}
+
 .maps-list {
     height: calc(100% - 50px);
 }
@@ -207,7 +280,38 @@ html {
     margin-top: 40px;
 }
 
+.add-landmark {
+    display: flex;
+    transform: translate(0px, -30px);
+}
+
+.add-landmark-button {
+    padding-top: 6px;
+    text-align: center;
+    background-color: var(--dark-blue);
+    width: 10%;
+}
+
+.landmarks-text-field {
+    width: 90%;
+    height: 35px;
+    color: white;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.638);
+}
+
 .text-field input {
+    color: white;
+    width: 100%;
+    padding: 0 5px;
+    height: 30px;
+    font-size: 16px;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.landmarks-text-field input {
     color: white;
     width: 100%;
     padding: 0 5px;
@@ -284,4 +388,18 @@ html {
 
 .maps-list {
     overflow: auto;
+}
+
+.parent-region {
+    display: flex;
+}
+
+.parent-name {
+    padding-left: 10px;
+    color: var(--blue);
+}
+
+.parent-name:hover {
+    cursor: pointer;
+    color: var(--dark-blue);
 }
