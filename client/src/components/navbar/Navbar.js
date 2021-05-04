@@ -14,8 +14,10 @@ const Navbar = (props) => {
         Logout();
         const { data } = await props.fetchUser();
         if (data) {
-            await client.resetStore();
+            window.location.reload();
+            //await client.resetStore();
             history.push("/");
+            console.log("hi");
         }
     }
 
@@ -54,7 +56,10 @@ const Navbar = (props) => {
                         <div className="nav-button username">{props.user.name}</div>
                     </Link>
                     <Link style={buttonStyle} to='/'>
-                        <div onClick={handleLogout} className="nav-button">Logout</div>
+                        <div onClick={() => {
+                            handleLogout();
+                            handleLogout();
+                        }} className="nav-button">Logout</div>
                     </Link>
                 </div>
             )

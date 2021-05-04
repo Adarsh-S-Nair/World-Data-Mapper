@@ -165,20 +165,12 @@ html {
 }
 
 .region-entry:hover > .control-col > .region-entry-control {
-    cursor: pointer;
     display: flex;
 }
 
-.view-entry:hover {
-    color: var(--blue);
-}
-
 .delete-entry:hover {
+    cursor: pointer;
     color: var(--light-red);
-}
-
-.view-subregion:hover {
-    color: var(--blue);
 }
 
 .region-viewer {

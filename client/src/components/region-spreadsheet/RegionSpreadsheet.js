@@ -87,16 +87,21 @@ const RegionSpreadsheet = (props) => {
                     {
                         regions.map((region) => (
                             <div className="region-entry">
-                                <div className="name-col">{region.name}</div>
+                                <div className="name-col"><span className={"spreadsheet-button"} onClick={() => {
+                                    history.push(`/spreadsheet/${map._id}/${region._id}`);
+                                    refetchMaps(refetch);
+                                }}>{region.name}</span></div>
                                 <div className="capital-col">{region.capital}</div>
                                 <div className="leader-col">{region.leader}</div>
                                 <div className="flag-col">{region.flag}</div>
-                                <div className="landmarks-col">{region.landmarks}</div>
+                                <div className="landmarks-col" onClick={() => {
+                                    history.push(`/viewer/${map._id}/${region._id}`);
+                                }}><span className={"spreadsheet-button"}>{region.landmarks}</span></div>
                                 <div className="control-col ">
-                                    <div className="region-entry-control view-entry material-icons" onClick={() => {
+                                    <div className="region-entry-control spreadsheet-button material-icons" onClick={() => {
                                         history.push(`/viewer/${map._id}/${region._id}`);
                                     }}>visibility</div>
-                                    <div className="region-entry-control view-subregion material-icons" onClick={() => {
+                                    <div className="region-entry-control spreadsheet-button material-icons" onClick={() => {
                                         history.push(`/spreadsheet/${map._id}/${region._id}`);
                                         refetchMaps(refetch);
                                     }}>reorder</div>
