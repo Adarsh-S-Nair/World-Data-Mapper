@@ -16,6 +16,7 @@ const Navbar = (props) => {
         if (data) {
             window.location.reload();
             //await client.resetStore();
+            props.tps.clearAllTransactions();
             history.push("/");
             console.log("hi");
         }
@@ -53,7 +54,7 @@ const Navbar = (props) => {
             navbarOptions = (
                 <div className="navbar-options">
                     <Link style={buttonStyle} to="/update-account">
-                        <div className="nav-button username">{props.user.name}</div>
+                        <div onClick={() => {props.tps.clearAllTransactions()}}className="nav-button username">{props.user.name}</div>
                     </Link>
                     <Link style={buttonStyle} to='/'>
                         <div onClick={() => {
@@ -89,7 +90,7 @@ const Navbar = (props) => {
     return(
         <div className="navbar">
             <Link style={buttonStyle} to="/">
-                <div className="logo">The World Data Mapper</div>
+                <div onClick={() => {props.tps.clearAllTransactions()}}className="logo">The World Data Mapper</div>
             </Link>
             { navbarOptions }
         </div>

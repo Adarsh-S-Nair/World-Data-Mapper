@@ -26,7 +26,14 @@ const typeDefs = gql`
         renameMap(_id: String!, name: String!): String
         deleteMap(_id: String!): Boolean
         moveMapToTop(_id: String!, owner: String!): Boolean
-        addSubregion(mapID: String!, regionID: String!): String
+        addSubregion(_id: String!, region: RegionInput!): String
+        deleteSubregion(_id: String!, regionID: String!): String
+        updateRegionField(_id: String!, regionID: String!, field: String!, value: String!): String
+        changeParentRegion(_id: String!, regionID: String!, parent: String!) : String
+        sortByField(_id: String!, field: String!): String
+        setRegions(_id: String!, subregions: [RegionInput!]!): String
+        addLandmark(_id: String, regionID: String!, landmark: String!): String
+        deleteLandmark(_id: String, regionID: String!, landmark: String!): String
     }
     input MapInput {
         _id: String
@@ -37,6 +44,10 @@ const typeDefs = gql`
     input RegionInput {
         _id: String
         name: String
+        capital: String
+        leader: String
+        flag: String
+        landmarks: [String]
         parent: String
     }
 `;

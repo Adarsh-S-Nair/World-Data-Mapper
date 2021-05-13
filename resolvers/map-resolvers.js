@@ -74,23 +74,107 @@ module.exports = {
             }
         },
         addSubregion: async (_, args) => {
-            const { mapID, regionID } = args;
-            const mapObjId = new ObjectId(mapID);
-            const map = await Map.findOne({ _id: mapObjId });
-            const region = {
-                _id: new ObjectId(),
-                name: "Untitled",
-                capital: "N/A",
-                leader: "N/A",
-                flag: "[Image Here]",
-                landmarks: "N/A",
-                parent: regionID
-            };
-            let subregions = map.subregions;
+            const { _id, region} = args;
+            const mapID = new ObjectId(_id);
+            const regionID = new ObjectId();
+            const found = await Map.findOne({ _id: mapID });
+            if(!found) return ("Map not found");
+            if(region._id === '') region._id = regionID;
+            let subregions = found.subregions;
             subregions.push(region);
-            const updated = await Map.updateOne({ _id: mapObjId }, { subregions: subregions });
-            if (updated) return (region._id);
-            else return ("Could not add subregion");
+            const updated = await Map.updateOne({ _id: mapID}, { subregions: subregions});
+            if(updated) return (region._id);
+            else return ('Could not add subregion');
+        },
+        deleteSubregion: async (_, args) => {
+            const { _id, regionID } = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = found.subregions;
+            subregions = subregions.filter(region => region._id != regionID);
+
+            const updated = await Map.updateOne({_id: mapID}, { subregions: subregions })
+            if(updated) return ("done")
+            else return "not done";
+        },
+        updateRegionField: async (_, args) => {
+            const { _id, regionID, field, value } = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = found.subregions;
+            const index = subregions.findIndex(region => region._id == regionID);
+            subregions[index][field] = value;
+            const updated = await Map.updateOne({ _id: mapID}, { subregions: subregions });
+            if(updated) return "Updated field";
+            return "Could not update field";
+        },
+        changeParentRegion: async(_, args) => {
+            const { _id, regionID, parent} = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = found.subregions;
+            const index = subregions.findIndex(region => region._id == regionID);
+            subregions[index].parent = parent;
+            const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
+            if(updated) return "Changed parent";
+            return "Could not change parent";
+        },
+        sortByField: async(_, args) => {
+            const { _id, field } = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = [...found.subregions];
+            subregions.sort((a, b) => a[field].localeCompare(b[field]));
+            
+            function checkIfListsEqual(list1, list2) {
+                for(let i = 0; i < list1.length; i++) {
+                    if(list1[i]._id != list2[i]._id) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            subregions = checkIfListsEqual(subregions, found.subregions) ? subregions.reverse() : subregions;
+
+            const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
+            if(updated) return "Sorted";
+            return "Could not sort";
+        },
+        setRegions: async(_, args) => {
+            const { _id, subregions } = args;
+            const mapID = new ObjectId(_id);
+            const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
+            if(updated) return "List reverted";
+            return "List could not be reverted";
+        },
+        addLandmark: async(_, args) => {
+            const { _id, regionID, landmark } = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = found.subregions;
+            let region = subregions.find((r) => r._id == regionID);
+            let index = subregions.findIndex((r => r._id == regionID));
+            region.landmarks.push(landmark);
+            subregions.splice(index, 1, region);
+            console.log(region);
+            const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
+            if (updated) return "Added landmark";
+            return "Could not add landmark";
+        },
+        deleteLandmark: async(_, args) => {
+            const { _id, regionID, landmark } = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = found.subregions;
+            let region = subregions.find((r) => r._id == regionID);
+            let index = subregions.findIndex(r => r._id == regionID);
+            region.landmarks = region.landmarks.filter(l => l != landmark);
+            subregions.splice(index, 1, region);
+            console.log(region);
+            const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
+            if (updated) return "Deleted landmark";
+            return "Could not delete landmark";
         }
     }
 }
