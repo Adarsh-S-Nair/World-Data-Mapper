@@ -34,6 +34,7 @@ const typeDefs = gql`
         setRegions(_id: String!, subregions: [RegionInput!]!): String
         addLandmark(_id: String, regionID: String!, landmark: String!): String
         deleteLandmark(_id: String, regionID: String!, landmark: String!): String
+        editLandmark(_id: String!, regionID: String!, prevLandmark: String!, newLandmark: String!): String
     }
     input MapInput {
         _id: String

@@ -527,6 +527,13 @@ select option {
     justify-content: space-between;
 }
 
+.sublandmark-entry {
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    color: rgb(136, 136, 136);
+}
+
 .landmark-entry:hover {
     background-color: rgba(0, 0, 0, 0.404);
 }
@@ -548,4 +555,9 @@ select option {
 .delete-landmark:hover {
     cursor: pointer;
     color: var(--light-red);
+}
+
+.edit-landmark:hover {
+    cursor: pointer;
+    color: var(--blue);
 }

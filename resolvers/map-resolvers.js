@@ -157,7 +157,6 @@ module.exports = {
             let index = subregions.findIndex((r => r._id == regionID));
             region.landmarks.push(landmark);
             subregions.splice(index, 1, region);
-            console.log(region);
             const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
             if (updated) return "Added landmark";
             return "Could not add landmark";
@@ -171,10 +170,26 @@ module.exports = {
             let index = subregions.findIndex(r => r._id == regionID);
             region.landmarks = region.landmarks.filter(l => l != landmark);
             subregions.splice(index, 1, region);
-            console.log(region);
             const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
             if (updated) return "Deleted landmark";
             return "Could not delete landmark";
+        },
+        editLandmark: async(_, args) => {
+            const { _id, regionID, prevLandmark, newLandmark } = args;
+            const mapID = new ObjectId(_id);
+            const found = await Map.findOne({ _id: mapID });
+            let subregions = found.subregions;
+            let region = subregions.find((r) => r._id == regionID);
+            let index = subregions.findIndex(r => r._id == regionID);
+            for(var i = 0; i < region.landmarks.length; i++) {
+                if(region.landmarks[i] == prevLandmark) {
+                    region.landmarks[i] = newLandmark
+                }
+            }
+            subregions.splice(index, 1, region);
+            const updated = await Map.updateOne({ _id: mapID }, { subregions: subregions });
+            if (updated) return "Updated landmark name";
+            return "Could not update landmark name";
         }
     }
 }

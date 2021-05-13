@@ -4,10 +4,11 @@ import * as mutations 					from '../../cache/mutations';
 import { GET_DB_MAPS } 				from '../../cache/queries';
 import { useHistory, withRouter } from 'react-router-dom';
 import DeleteLandmarkModal from '../modals/DeleteLandmarkModal';
+import EditLandmarkModal from '../modals/EditLandmarkModal';
 
 import { 
 	ChangeParentRegion_Transaction,
-    UpdateMapRegions_Transaction,
+    EditLandmark_Transaction,
     UpdateRegionLandmarks_Transaction} 				from '../../utils/jsTPS';
 
 const RegionViewer = (props) => {
@@ -15,6 +16,7 @@ const RegionViewer = (props) => {
     let maps = [];
 
     const [showDeleteLandmarkModal, toggleShowDeleteLandmarkModal] = useState(false);
+    const [showEditLandmarkModal, toggleShowEditLandmarkModal] = useState(false);
 
     const [changeParentRegion, toggleChangeParentRegion] = useState(false);
     const [landmarkInput, setLandmarkInput] = useState("");
@@ -34,6 +36,7 @@ const RegionViewer = (props) => {
     const [ChangeParentRegion] = useMutation(mutations.CHANGE_PARENT_REGION);
     const [AddLandmark] = useMutation(mutations.ADD_LANDMARK);
     const [DeleteLandmark] = useMutation(mutations.DELETE_LANDMARK);
+    const [EditLandmark] = useMutation(mutations.EDIT_LANDMARK);
 
     const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
 	if(loading) { console.log(loading, 'loading'); }
@@ -95,7 +98,7 @@ const RegionViewer = (props) => {
     }
 
     const handleAddLandmark = () => {
-        if(landmarks.includes(landmarkInput)) { 
+        if(landmarks.includes(landmarkInput) || sublandmarksWithoutRegion.includes(landmarkInput)) { 
             alert("Can not add duplicate landmarks")
             return; 
         };
@@ -106,6 +109,16 @@ const RegionViewer = (props) => {
 
     const handleDeleteLandmark = (landmark) => {
         let transaction = new UpdateRegionLandmarks_Transaction(map._id, region._id, landmark, 0, AddLandmark, DeleteLandmark);
+        props.tps.addTransaction(transaction);
+        redo();
+    }
+
+    const handleEditLandmark = (prevLandmark, landmark) => {
+        if(landmarks.includes(landmark) || sublandmarksWithoutRegion.includes(landmark)) { 
+            alert("Can not rename to a landmark that already exists")
+            return; 
+        };
+        let transaction = new EditLandmark_Transaction(map._id, region._id, prevLandmark, landmark, EditLandmark);
         props.tps.addTransaction(transaction);
         redo();
     }
@@ -137,7 +150,23 @@ const RegionViewer = (props) => {
     })
     options = options.filter((r) => r._id != region._id)
     
-    console.log(landmarks);
+    let sublandmarks = [];
+    let sublandmarksWithoutRegion = [];
+    options.forEach((r) => {
+        let current = r;
+        while(current.parent != '') {
+            if(current.parent == region._id) {
+                let landmarksWithRegion= [...r.landmarks];
+                for(var i = 0; i < landmarksWithRegion.length; i++) {
+                    landmarksWithRegion[i] += (" - " + r.name);
+                }
+                sublandmarksWithoutRegion = [...r.landmarks, ...sublandmarksWithoutRegion];
+                sublandmarks = [...landmarksWithRegion, ...sublandmarks];
+                break;
+            }
+            current = options.find((reg) => reg._id == current.parent);
+        }
+    })
 
 
     const undoStyle = props.tps.hasTransactionToUndo() ? "view-control material-icons" : "view-control-disabled material-icons";
@@ -158,12 +187,22 @@ const RegionViewer = (props) => {
                                         {landmark}
                                     </div>
                                     <div className="landmark-controls">
-                                        <div className="material-icons">edit</div>
+                                        <div onClick={() => {
+                                            setLandmarkDelete(landmark);
+                                            toggleShowEditLandmarkModal(true);
+                                        }}className="edit-landmark material-icons">edit</div>
                                         <div onClick={() => {
                                             setLandmarkDelete(landmark);
                                             toggleShowDeleteLandmarkModal(true);
                                         }} className="delete-landmark material-icons">close</div>
                                     </div>
+                                </div>
+                            ))
+                        }
+                        {
+                            sublandmarks.map((sublandmark) => (
+                                <div className="sublandmark-entry">
+                                    {sublandmark}
                                 </div>
                             ))
                         }
@@ -215,6 +254,7 @@ const RegionViewer = (props) => {
                 </div>
             </div>
             {showDeleteLandmarkModal && <DeleteLandmarkModal landmark={landmarkDelete} deleteLandmark={handleDeleteLandmark} toggleShowDeleteLandmarkModal={toggleShowDeleteLandmarkModal}/>}
+            {showEditLandmarkModal && <EditLandmarkModal landmark={landmarkDelete} editLandmark={handleEditLandmark} toggleShowEditLandmarkModal={toggleShowEditLandmarkModal} />}
         </>
     )
 }
