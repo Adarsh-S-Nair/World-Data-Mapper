@@ -39,8 +39,6 @@ const RegionViewer = (props) => {
     const [EditLandmark] = useMutation(mutations.EDIT_LANDMARK);
 
     const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
-	if(loading) { console.log(loading, 'loading'); }
-	if(error) { console.log(error, 'error'); }
 	if(data) { maps = data.getAllMaps; }
 
     useEffect(() => {
@@ -126,15 +124,27 @@ const RegionViewer = (props) => {
     const undo = async () => {
         const retVal = await props.tps.undoTransaction();
         await refetchMaps(refetch);
-        console.log(regions);
         return retVal;
     }
 
     const redo = async () => {
         const retVal = await props.tps.doTransaction();
         await refetchMaps(refetch);
-        console.log(regions);
         return retVal;
+    }
+
+    const handleNavigate = (direction) => {
+        if (direction == -1 ) {
+            if (index == 0) { return };
+            props.tps.clearAllTransactions();
+            history.push(`/viewer/${map._id}/${siblingRegions[index - 1]._id}`)
+        }
+        else if (direction == 1) {
+            if (index == siblingRegions.length - 1) { return };
+            props.tps.clearAllTransactions();
+            history.push(`/viewer/${map._id}/${siblingRegions[index + 1]._id}`);
+        }
+        refetchMaps(refetch);
     }
 
     let options = regions
@@ -168,6 +178,15 @@ const RegionViewer = (props) => {
         }
     })
 
+    let siblingRegions = [];
+    regions.forEach((r) => {
+        if(r.parent == region.parent) { siblingRegions.push(r) };
+    })
+    const index = siblingRegions.findIndex((r) => r._id == region._id);
+    console.log(index);
+
+    const navPrevStyle = index == 0 ? "view-control-disabled material-icons" : "view-control material-icons";
+    const navNextStyle = index == siblingRegions.length - 1 ?  "view-control-disabled material-icons" : "view-control material-icons";
 
     const undoStyle = props.tps.hasTransactionToUndo() ? "view-control material-icons" : "view-control-disabled material-icons";
     const redoStyle = props.tps.hasTransactionToRedo() ? "view-control material-icons" : "view-control-disabled material-icons";
@@ -177,78 +196,100 @@ const RegionViewer = (props) => {
     return (
         <>
             <div className="region-viewer">
-                <div className="landmarks-card">
-                    <h1>Landmarks</h1>
-                    <div className="landmarks-form">
+                <div className="sibling-regions-controls">
+                    <div onClick={() => {handleNavigate(-1)}} className={navPrevStyle}>navigate_before</div>
+                    <div onClick={() => {handleNavigate(1)}} className={navNextStyle}>navigate_next</div>
+                </div>
+                <div className="viewer-header">
+                    <div className="region-path">
                         {
-                            landmarks.map((landmark) => (
-                                <div className="landmark-entry">
-                                    <div className="landmark-name">
-                                        {landmark}
-                                    </div>
-                                    <div className="landmark-controls">
-                                        <div onClick={() => {
-                                            setLandmarkDelete(landmark);
-                                            toggleShowEditLandmarkModal(true);
-                                        }}className="edit-landmark material-icons">edit</div>
-                                        <div onClick={() => {
-                                            setLandmarkDelete(landmark);
-                                            toggleShowDeleteLandmarkModal(true);
-                                        }} className="delete-landmark material-icons">close</div>
-                                    </div>
-                                </div>
-                            ))
-                        }
-                        {
-                            sublandmarks.map((sublandmark) => (
-                                <div className="sublandmark-entry">
-                                    {sublandmark}
+                            path.map((region, index) => (
+                                <div className="path-section">
+                                    <div onClick={() => {
+                                        props.tps.clearAllTransactions();
+                                        history.push(`/spreadsheet/${map._id}/${region[1]}`);
+                                        refetchMaps(refetch);
+                                    }}className="path-name">{region[0]}</div>
+                                    {index != (path.length - 1) ? <span class="right-arrow material-icons">navigate_next</span> : ''}
                                 </div>
                             ))
                         }
                     </div>
-                    <div className="add-landmark">
-                        <div className="landmarks-text-field">
-                            <input onBlur={updateInput} name="landmark" type="text" required></input>
-                        </div>
-                        <div onClick={handleAddLandmark} className="add-landmark-button material-icons">add</div>
+                    <div className="details-controls">
+                        <div onClick={props.tps.hasTransactionToUndo() ? undo : null} className={undoStyle}>undo</div>
+                        <div onClick={props.tps.hasTransactionToRedo() ? redo : null} className={redoStyle}>redo</div>
                     </div>
                 </div>
-                <div className="details-card">
-                    <div className="details-header">
-                        <h1>{region.name}</h1>
-                        <div className="details-controls">
-                            <div onClick={props.tps.hasTransactionToUndo() ? undo : null} className={undoStyle}>undo</div>
-                            <div onClick={props.tps.hasTransactionToRedo() ? redo : null} className={redoStyle}>redo</div>
+                <div className="viewer-cards">
+                    <div className="landmarks-card">
+                        <h1>Landmarks</h1>
+                        <div className="landmarks-form">
+                            {
+                                landmarks.map((landmark) => (
+                                    <div className="landmark-entry">
+                                        <div className="landmark-name">
+                                            {landmark}
+                                        </div>
+                                        <div className="landmark-controls">
+                                            <div onClick={() => {
+                                                setLandmarkDelete(landmark);
+                                                toggleShowEditLandmarkModal(true);
+                                            }}className="edit-landmark material-icons">edit</div>
+                                            <div onClick={() => {
+                                                setLandmarkDelete(landmark);
+                                                toggleShowDeleteLandmarkModal(true);
+                                            }} className="delete-landmark material-icons">close</div>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            {
+                                sublandmarks.map((sublandmark) => (
+                                    <div className="sublandmark-entry">
+                                        {sublandmark}
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div className="add-landmark">
+                            <div className="landmarks-text-field">
+                                <input onBlur={updateInput} name="landmark" type="text" required></input>
+                            </div>
+                            <div onClick={handleAddLandmark} className="add-landmark-button material-icons">add</div>
                         </div>
                     </div>
-                    <div className="region-details">
-                        <div className="region-viewer-image">[Image Here]</div>
-                        <div className="viewer-details">
-                            <div className="viewer-detail parent-region">
-                                <div>Parent Region: </div>
-                                {
-                                    changeParentRegion ?
-                                    <select autoFocus options={options} onBlur={handleChangeParent} className="select-parent-region">
-                                        {
-                                            options.map(option => (
-                                                <option className={"select-option"} value={option._id}>{option.name}</option>
-                                            ))
-                                        }
-                                    </select>
-                                    : <div className={"parent-name"}onClick={() => {
-                                        props.tps.clearAllTransactions();
-                                        history.push(`/spreadsheet/${map._id}/${parentId}`)
-                                    }}>{parentName}</div>
-                                }
-                                {
-                                    changeParentRegion ? null
-                                    : <div onClick={() => {toggleChangeParentRegion(!changeParentRegion)}} className="change-parent material-icons">edit</div>
-                                }
+                    <div className="details-card">
+                        <div className="details-header">
+                            <h1>{region.name}</h1>
+                        </div>
+                        <div className="region-details">
+                            <div className="region-viewer-image">[Image Here]</div>
+                            <div className="viewer-details">
+                                <div className="viewer-detail parent-region">
+                                    <div>Parent Region: </div>
+                                    {
+                                        changeParentRegion ?
+                                        <select autoFocus options={options} onBlur={handleChangeParent} className="select-parent-region">
+                                            {
+                                                options.map(option => (
+                                                    <option className={"select-option"} value={option._id}>{option.name}</option>
+                                                ))
+                                            }
+                                        </select>
+                                        : <div className={"parent-name"}onClick={() => {
+                                            props.tps.clearAllTransactions();
+                                            history.push(`/spreadsheet/${map._id}/${parentId}`)
+                                        }}>{parentName}</div>
+                                    }
+                                    {
+                                        changeParentRegion ? null
+                                        : <div onClick={() => {toggleChangeParentRegion(!changeParentRegion)}} className="change-parent material-icons">edit</div>
+                                    }
+                                </div>
+                                <div className="viewer-detail">Region Capital: {regionCapital}</div>
+                                <div className="viewer-detail">Region Leader: {regionLeader}</div>
+                                <div className="viewer-detail">Number of Subregions: {subRegionsLength}</div>
                             </div>
-                            <div className="viewer-detail">Region Capital: {regionCapital}</div>
-                            <div className="viewer-detail">Region Leader: {regionLeader}</div>
-                            <div className="viewer-detail">Number of Subregions: {subRegionsLength}</div>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 html {
-    overflow: hidden;
+    overflow: auto;
     height: 100%;
 }
 
@@ -73,6 +73,7 @@ html {
 
 .region-path {
     padding-top: 20px;
+    padding-bottom: 20px;
     font-size: 30px;
     display: flex;
 }
@@ -197,27 +198,24 @@ html {
 }
 
 .region-viewer {
-    display: flex;
     user-select: none;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 20px;
     min-width: 850px;
     width: 90%;
-    height: 80%;
+    height: 90%;
     color: white;
-
-    justify-content: space-around;
-
-    position: absolute;
+    justify-content: space-between;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    position: absolute;
     
 }
 
 .landmarks-form {
     user-select: none;
-    width: 100%;
     height: 95%;
     color: white;
     background-color: var(--dark-gray);
@@ -252,11 +250,12 @@ html {
 }
 
 .landmarks-card {
-    width: 35%;
+    width: 40%;
 }
 
 .details-card {
     width: 55%;
+    margin-left: 5%;
 }
 
 .landmarks-card h1 {
@@ -334,11 +333,12 @@ html {
 }
 
 .landmarks-text-field {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),0 6px 40px 0 rgba(0, 0, 0, 0.2);
     width: 90%;
     height: 35px;
-    color: white;
+    color: black;
     position: relative;
-    background-color: rgba(0, 0, 0, 0.638);
+    background-color: rgb(138, 138, 138);
 }
 
 .text-field input {
@@ -373,7 +373,7 @@ html {
 }
 
 .landmarks-text-field input {
-    color: white;
+    color: black;
     width: 100%;
     padding: 0 5px;
     height: 30px;
@@ -500,7 +500,7 @@ select option {
 }
 
 .details-controls {
-    padding: 3px 50px 0px 0px;
+    padding: 20px 50px 0px 0px;
 }
 
 .view-control-disabled {
@@ -513,6 +513,7 @@ select option {
 }
 
 .view-control:hover {
+    color: var(--blue);
     cursor: pointer;
 }
 
@@ -560,4 +561,21 @@ select option {
 .edit-landmark:hover {
     cursor: pointer;
     color: var(--blue);
+}
+
+.viewer-cards {
+    display: flex;
+}
+
+.viewer-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sibling-regions-controls {
+    display: flex;
+}
+
+.navigate-arrows {
+    font-size: 50px;
 }
