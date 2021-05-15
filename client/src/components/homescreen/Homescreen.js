@@ -6,7 +6,7 @@ const Homescreen = (props) => {
     return(
         <div className="homescreen">
             <div className="welcome-message">The World Data Mapper</div>
-            <img className="map" src="/imgs/globe.png"/>
+            <img className="map" src="/images/globe.png"/>
         </div>
     )
 }

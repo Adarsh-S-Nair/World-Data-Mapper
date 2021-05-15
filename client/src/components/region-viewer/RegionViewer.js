@@ -50,6 +50,15 @@ const RegionViewer = (props) => {
         setLandmarkInput(value);
     }
 
+    const handleKeyDown = (e) => {
+        if(e.keyCode == 13) {
+            const { value } = e.target;
+            setLandmarkInput(value);
+            handleAddLandmark(value);
+            e.value = "";
+        }
+    }
+
     const refetchMaps = async (refetch) => {
         const { loading, error, data } = await refetch();
         if (data) {
@@ -95,12 +104,12 @@ const RegionViewer = (props) => {
         await refetchMaps(refetch);
     }
 
-    const handleAddLandmark = () => {
-        if(landmarks.includes(landmarkInput) || sublandmarksWithoutRegion.includes(landmarkInput)) { 
+    const handleAddLandmark = (landmark) => {
+        if(landmarks.includes(landmark) || sublandmarksWithoutRegion.includes(landmark)) { 
             alert("Can not add duplicate landmarks")
             return; 
         };
-        let transaction = new UpdateRegionLandmarks_Transaction(map._id, region._id, landmarkInput, 1, AddLandmark, DeleteLandmark);
+        let transaction = new UpdateRegionLandmarks_Transaction(map._id, region._id, landmark, 1, AddLandmark, DeleteLandmark);
         props.tps.addTransaction(transaction);
         redo();
     }
@@ -193,6 +202,16 @@ const RegionViewer = (props) => {
 
     const history = useHistory();
 
+    let flagPath = "/images/";
+    let tempPath = [...path];
+    tempPath = tempPath.filter((r) => r[0] != region.name);
+    tempPath.forEach((r) => {
+        flagPath += (r[0] + "/");
+    })
+    flagPath += (region.name + " Flag.png");
+    var image = new Image();
+    image.src = flagPath;
+
     return (
         <>
             <div className="region-viewer">
@@ -208,7 +227,6 @@ const RegionViewer = (props) => {
                                     <div onClick={() => {
                                         props.tps.clearAllTransactions();
                                         history.push(`/spreadsheet/${map._id}/${region[1]}`);
-                                        refetchMaps(refetch);
                                     }}className="path-name">{region[0]}</div>
                                     {index != (path.length - 1) ? <span class="right-arrow material-icons">navigate_next</span> : ''}
                                 </div>
@@ -253,9 +271,9 @@ const RegionViewer = (props) => {
                         </div>
                         <div className="add-landmark">
                             <div className="landmarks-text-field">
-                                <input onBlur={updateInput} name="landmark" type="text" required></input>
+                                <input onKeyDown={handleKeyDown} onBlur={updateInput} name="landmark" type="text" required></input>
                             </div>
-                            <div onClick={handleAddLandmark} className="add-landmark-button material-icons">add</div>
+                            <div onClick={() => {handleAddLandmark(landmarkInput)}} className="add-landmark-button material-icons">add</div>
                         </div>
                     </div>
                     <div className="details-card">
@@ -263,7 +281,10 @@ const RegionViewer = (props) => {
                             <h1>{region.name}</h1>
                         </div>
                         <div className="region-details">
-                            <div className="region-viewer-image">[Image Here]</div>
+                            {
+                                image.width == 0 ? <div className="region-viewer-image">N/A</div>
+                                : <img className="region-viewer-image" src={flagPath}/>
+                            }
                             <div className="viewer-details">
                                 <div className="viewer-detail parent-region">
                                     <div>Parent Region: </div>

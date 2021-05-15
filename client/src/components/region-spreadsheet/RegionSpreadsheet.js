@@ -22,11 +22,13 @@ const RegionSpreadsheet = (props) => {
     const [path, setPath] = useState([]);
     const [map, setMap] = useState({});
     const [regions, setRegions] = useState([]);
+    const [allRegions, setAllRegions] = useState([]);
     const [region, setRegion] = useState({});
     const [regionID, setRegionID] = useState("");
 
     const [showDeleteSubregion, toggleDeleteSubregion] = useState(false);
     const [regionToDelete, setRegionToDelete] = useState({});
+    const [editingRegionAndField, setEditingRegionAndField] = useState({});
 
     const [AddSubregion] = useMutation(mutations.ADD_SUBREGION);
     const [DeleteSubregion] = useMutation(mutations.DELETE_SUBREGION);
@@ -56,7 +58,7 @@ const RegionSpreadsheet = (props) => {
             setMap(maps.find((map) => map._id == mapId));
             setRegion(regions.find((region) => region._id == regionId));
             setRegions(regions.filter(region => region.parent == regionId));
-            console.log(regions);
+            setAllRegions(regions);
 
             let tempPath = []
             let current = regions.find((region) => region._id == regionId);
@@ -133,17 +135,23 @@ const RegionSpreadsheet = (props) => {
         redo();
     }
 
+    const setFieldEditable = (rID, field) => {
+        setEditingRegionAndField({
+            _id: rID,
+            field: field
+        });
+    }
+
     const setShowDeleteSubregion = (region) => {
         setRegionToDelete(region);
         toggleDeleteSubregion(!showDeleteSubregion);
     }
-
-
     
     const history = useHistory();
 
     const undoStyle = props.tps.hasTransactionToUndo() ? "region-control material-icons" : "region-control-disabled material-icons";
     const redoStyle = props.tps.hasTransactionToRedo() ? "region-control material-icons" : "region-control-disabled material-icons";
+
 
     return (
         <>
@@ -199,8 +207,9 @@ const RegionSpreadsheet = (props) => {
                     <div className="spreadsheet-data">
                         {
                             regions.map((region) => (
-                                <RegionSpreadsheetEntry editSubregion={editSubregion} setShowDeleteSubregion={setShowDeleteSubregion} 
-                                tps={props.tps} region={region} map={map} refetchMaps={refetchMaps} refetch={refetch} />
+                                <RegionSpreadsheetEntry regions={allRegions} path={path} editSubregion={editSubregion} setShowDeleteSubregion={setShowDeleteSubregion} 
+                                tps={props.tps} region={region} map={map} refetchMaps={refetchMaps} refetch={refetch} 
+                                setFieldEditable={setFieldEditable} editingRegionAndField={editingRegionAndField} />
                             ))
                         }
                     </div>

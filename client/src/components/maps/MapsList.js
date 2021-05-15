@@ -19,7 +19,8 @@ const MapsList = (props) => {
                     <div key={map._id} className="map-entry">
                         <div onClick={() => {
                             props.moveMapToTop(map._id, map.owner);
-                            history.push(`/spreadsheet/${map._id}/${map.subregions[0]._id}`);
+                            const regionID = map.subregions.find((r) => r.parent == '')._id
+                            history.push(`/spreadsheet/${map._id}/${regionID}`);
                         }} className="map-name">{map.name}</div>
                         <div className="map-controls">
                             <div onClick={() => {props.setShowRenameMap(map)}} className="edit-map-name material-icons">edit</div>
