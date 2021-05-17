@@ -93,8 +93,7 @@ const RegionSpreadsheetEntry = (props) => {
                 }} className="leader-col">{region.leader}</div>
             }
             {
-                image.width == 0 ? <div className="flag-col">N/A</div>
-                : <img src={flagPath} className="flag flag-col" />
+                <img src={flagPath} className="flag flag-col" />
             }
             <div className="landmarks-col" onClick={() => {
                 props.tps.clearAllTransactions();
